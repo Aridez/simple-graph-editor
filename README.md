@@ -9,4 +9,5 @@ It also includes a "weighted edges" system that is especially useful to quickly 
 - Project page: [https://aridez.github.io/Simple-Graph-Editor/](https://aridez.github.io/Simple-Graph-Editor/)
 - Quick start guide:[https://aridez.github.io/Simple-Graph-Editor/QuickStart.html](https://aridez.github.io/Simple-Graph-Editor/QuickStart.html)
 - Video preview:[https://aridez.github.io/Simple-Graph-Editor/videohtml](https://aridez.github.io/Simple-Graph-Editor/video.html)
-- Download: 
+- Download: [https://github.com/Aridez/Simple-Graph-Editor/releases](https://github.com/Aridez/Simple-Graph-Editor/releases)
+- Asset store link: (coming soon)
