@@ -125,7 +125,7 @@ public class WaypointClusterEditor : Editor {
 		GameObject waypointInstance = Instantiate(waypointAux) as GameObject;
 		waypointInstance.transform.position = hitinfo.point;
 		waypointInstance.transform.parent = clusterobject.cluster.transform;
-		waypointInstance.name = clusterobject.waypoints.Count.ToString();
+		waypointInstance.name = (clusterobject.waypoints.Count + 1).ToString();
 		clusterobject.waypoints.Add(waypointInstance.GetComponent<WayPoint>());
 		waypointInstance.GetComponent<WayPoint>().setParent(clusterobject);
 		Undo.RegisterCreatedObjectUndo (waypointInstance, "Created waypoint");

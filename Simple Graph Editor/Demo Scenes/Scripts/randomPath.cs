@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class followWaypoints : MonoBehaviour {
+public class randomPath : MonoBehaviour {
 
     public WayPoint target = null;
     public float speed = 1f;
