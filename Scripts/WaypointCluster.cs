@@ -4,17 +4,33 @@ using System.Collections.Generic;
 
 public class WaypointCluster : MonoBehaviour {
 
-	[HideInInspector] public List<WayPoint> waypoints = new List<WayPoint>(); /**< List of ALL waypoints inside the cluster */
+	[HideInInspector] 
+	/// <summary>
+	/// List of ALL waypoints inside the cluster
+	/// </summary>
+	public List<WayPoint> waypoints = new List<WayPoint>();
     [HideInInspector]
-    public GameObject cluster = null;		 /**< Cluster object where the waypints will be added */
-    private uint currentID = 0;              /**< Numeric id assigned to the waypoint */
+	/// <summary>
+	/// Cluster object where the waypints will be added
+	/// </summary>
+    public GameObject cluster = null;
+	/// <summary>
+	/// Numeric id assigned to the waypoint
+	/// </summary>
+    private uint currentID = 0;
 
-	/** Removes all instances of a waypoint */
+	/// <summary>
+	/// List of ALL waypoints inside the cluster
+	/// </summary>
+	/// <param name="w"> The waypoint to remove</param>
 	public void remove(WayPoint w) {
 		waypoints.Remove(w);
 	}
 
-	/*Creates a new waypoint*/
+	/// <summary>
+	/// List of ALL waypoints inside the cluster
+	/// </summary>
+	/// <param name="point"> The point where the waypoint will be created</param>
 	public WayPoint CreateWaypoint(Vector3 point) {
 		GameObject waypointAux = Resources.Load("Waypoint")  as GameObject;
 		GameObject waypointInstance = Instantiate(waypointAux) as GameObject;
@@ -27,8 +43,4 @@ public class WaypointCluster : MonoBehaviour {
 		return waypointInstance.GetComponent<WayPoint>();
 	}
 	
-	/* Creates a link between source and destiny */
-	public static void link(WayPoint source, WayPoint destiny) {
-		source.addOutWayPoint(destiny);
-	}
 }

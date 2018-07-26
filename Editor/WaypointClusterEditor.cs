@@ -11,29 +11,68 @@ using System.Collections.Generic;
 
 [CustomEditor(typeof(WaypointCluster))]
 public class WaypointClusterEditor : Editor {
-											/**< Editing state, changed with buttons */
-	enum EditingState 	{None,				/**< Not currently editing */
-						Adding,      /**< Adding principal link arrows (red) */
-                        Removing    /**< Removing links between waypoints */
-                        };
 
+	/// <summary>
+	/// Editing state, changed with buttons
+	/// </summary>
+	enum EditingState 	{
+		/// <summary>
+		/// Not currently editing
+		/// </summary>
+		None,
+		/// <summary>
+		/// Adding principal link arrows (red)
+		/// </summary>
+		Adding,
+		/// <summary>
+		/// Removing links between waypoints
+		/// </summary>
+        Removing
+    };
+
+	/// <summary>
+	/// Editing state, changed with buttons
+	/// </summary>
 	private WaypointCluster clusterobject;			//Object being edited.
+		/// <summary>
+	/// Editing state, changed with buttons
+	/// </summary>
 	private bool dragging = false;					//True if the user is dragging the mouse.
+	/// <summary>
+	/// Editing state, changed with buttons
+	/// </summary>
 	private WayPoint waypointClicked;				//waypoint clicked, if any.
+	/// <summary>
+	/// Editing state, changed with buttons
+	/// </summary>
 	private WayPoint waypointDestiny;				//waypoint the mouse is over, if any.
+	/// <summary>
+	/// Editing state, changed with buttons
+	/// </summary>
 	private EditingState state = EditingState.None;	//Current editing state.
+	/// <summary>
+	/// Editing state, changed with buttons
+	/// </summary>
 	private string currentState = "Not editing.";	//Text shown in the inspector label.
+	/// <summary>
+	/// Editing state, changed with buttons
+	/// </summary>
 	private GameObject previewSphere;				//The small white preview sphere.
-	//private static GameObject cluster = null;		//The cluster gameObject where all waypoints are packed, only one.
+	/// <summary>
+	/// Editing state, changed with buttons
+	/// </summary>
 	int hash = "ClusterControl".GetHashCode();		//hash used to keep the focus on the current object
 	
+	/// <summary>
+	/// Editing state, changed with buttons
+	/// </summary>
 	void OnEnable() {
 		clusterobject = (WaypointCluster)target;
 	}
 
-	/* 	GUI showed on the inspector, default.
-	* 	Some buttons were added to change the editing state and a label to show the current state.
-	*/
+	/// <summary>
+	/// GUI showed on the inspector, some buttons were added to change the editing state and a label to show the current state.
+	/// </summary>
 	public override void OnInspectorGUI(){
 
 		DrawDefaultInspector ();
@@ -50,21 +89,11 @@ public class WaypointClusterEditor : Editor {
 			currentState = "Not editing.";
 		}
 		EditorGUILayout.LabelField("Current state: " + currentState);
-		/*if(GUILayout.Button("LISTALL")){ KEPT FOR DEBUG PUPOSES
-		cluster = GameObject.Find("Waypoint Cluster");
-		clusterobject.sources =new List<WayPoint>();
-		clusterobject.sinks = new List<WayPoint>();
-		clusterobject.waypoints = new List<WayPoint>();
-		foreach(Transform child in cluster.transform) {
-		if (child.gameObject.GetComponent<WayPointSource>() != null) clusterobject.sources.Add(child.gameObject.GetComponent<WayPointSource>());
-		if (child.gameObject.GetComponent<WayPointSink>() != null) clusterobject.sinks.Add(child.gameObject.GetComponent<WayPointSink>());
-		child.gameObject.name = clusterobject.waypoints.Count.ToString();
-		child.gameObject.GetComponent<WayPoint>().setParent(clusterobject);
-		clusterobject.waypoints.Add(child.gameObject.GetComponent<WayPoint>());
-		}
-		}*/
 	}
 
+	/// <summary>
+	/// Scene event handling
+	/// </summary>
 	void OnSceneGUI() {
 		Event current = Event.current;
 		//note: current.button == 0 works only the frame you press it.
@@ -80,7 +109,7 @@ public class WaypointClusterEditor : Editor {
 					break;
 
 				//White sphere creation and dragging = true
-				case EventType.mouseDown:
+				case EventType.MouseDown:
                     if (current.button == 1) //ignore right clicks, use them to cancel the dragging
                     {
                         dragging = false;
@@ -89,7 +118,7 @@ public class WaypointClusterEditor : Editor {
 					break;
 
 				//Point creation if necessary
-				case EventType.mouseUp:
+				case EventType.MouseUp:
                     if (current.button == 1) break;
                     if (!dragging) break;
                     dragging = false;
@@ -107,16 +136,15 @@ public class WaypointClusterEditor : Editor {
 		}
 	}
 
-	/**************************WAYPOINT AND LINK CREATION***********************************/
-
-	/** Finds the cluster object.
-	*	Adds the desired waypoint, depending on the current state.
-	*	Places it in the hitpoint, as a cluster object child.
-	*	Gives it a unique number.
-	*	Adds it to the cluster object lists.
-	*	If it is source/sink is added to the pertinent special list too.
-	*	The cluster object is referenced in the waypoint.
-	*/
+	/// <summary>
+	/// Finds the cluster object
+	/// Adds the desired waypoint, depending on the current state
+	/// Places it in the hitpoint, as a cluster object child
+	/// Gives it a unique number
+	/// Adds it to the cluster object lists
+	/// If it is source/sink is added to the pertinent special list too
+	/// The cluster object is referenced in the waypoint
+	/// </summary>
 	private WayPoint createPoint(RaycastHit hitinfo) {
 		if (clusterobject.cluster == null) clusterobject.cluster = new GameObject("Waypoint Cluster");
 		GameObject waypointAux;
@@ -132,46 +160,48 @@ public class WaypointClusterEditor : Editor {
 		return waypointInstance.GetComponent<WayPoint>();
 	}
 	
-	/**	a)Creates a link between two existing waypoints.
-	*	b)Creates and links a new waypoint to an existing waypoint.
-	*	c)Creates a new waypoiny with no links.
-	*/
+	/// <summary>
+	/// a)Creates a link between two existing waypoints.
+	/// b)Creates and links a new waypoint to an existing waypoint.
+	/// c)Creates a new waypoiny with no links.
+	/// </summary>
 	private void createLink(RaycastHit hitinfo) {
 		if (waypointClicked != null && waypointDestiny != null && waypointClicked != waypointDestiny) link (waypointClicked, waypointDestiny);
 		else if (waypointClicked != null && waypointDestiny == null) link (waypointClicked, createPoint(hitinfo));
 		else if (waypointClicked == null && waypointDestiny == null) createPoint(hitinfo);
 	}
 
-    /**	a)Removes a link between two existing waypoints.
-    */
+	/// <summary>
+	/// a)Removes a link between two existing waypoints.
+	/// </summary>
     private void removeLink(RaycastHit hitinfo)
     {
         if (waypointClicked != null && waypointDestiny != null && waypointClicked != waypointDestiny) unLink(waypointClicked, waypointDestiny);
     }
 
-    /* Creates a link between source and destiny */
+	/// <summary>
+	/// Creates a link between source and destiny
+	/// </summary>
     private void link(WayPoint source, WayPoint destiny) {
 		Undo.RecordObject(source, "waypointadd");
 		Undo.RecordObject(destiny, "waypointadd");
-		source.addOutWayPoint(destiny);
-        destiny.addInWayPoint(source);
+		source.linkTo(destiny);
 	}
 
-    /* Removes a link between source and destiny */
+	/// <summary>
+	/// Removes a link between source and destiny
+	/// </summary>
     private void unLink(WayPoint source, WayPoint destiny)
     {
         Undo.RecordObject(source, "waypointremove");
         Undo.RecordObject(destiny, "waypointremove");
-        source.removeOutWayPoint(destiny);
-        destiny.removeInWayPoint(source);
+        source.unlinkFrom(destiny);
     }
 
-
-    /**************************PREVIEW CREATIONG/MOVEMENT***********************************/
-
-    /**	Creates the white sphere preview.
-	*	If a waypoint is clicked then waypointClicked is set.
-	*/
+	/// <summary>
+	/// Creates the white sphere preview.
+	/// If a waypoint is clicked then waypointClicked is set.
+	/// </summary>
     private void createPreview() {
 		Ray worldRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
 		RaycastHit hitInfo;
@@ -184,12 +214,13 @@ public class WaypointClusterEditor : Editor {
 		}
 	}
 
-	/**	Moves the white sphere preview.
-	*	If the previewsphere is null it is created again.
-	*	If a waypointClicked is set then an arrow is created.
-	*	If there is hovering over another wayopint waypointDestiny is set and pointed with the preview arrow.
-	*	If there was no object hitted then the white sphete preview is destroyed.
-	*/
+	/// <summary>
+	/// Moves the white sphere preview.
+	/// If the previewsphere is null it is created again.
+	/// If a waypointClicked is set then an arrow is created.
+	/// If there is hovering over another wayopint waypointDestiny is set and pointed with the preview arrow.
+	/// If there was no object hitted then the white sphete preview is destroyed.
+	/// </summary>
 	private void movePreview() {
 		Ray worldRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
 		RaycastHit hitInfo;
