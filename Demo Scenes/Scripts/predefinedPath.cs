@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class predefinedPath : MonoBehaviour {
 
-    public WayPoint[] route;
+    public Waypoint[] route;
 
     public float speed = 1f;
     private Transform t;

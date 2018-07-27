@@ -3,7 +3,7 @@ using System.Collections;
 
 public class randomPath : MonoBehaviour {
 
-    public WayPoint target = null;
+    public Waypoint target = null;
     public float speed = 1f;
     private Transform t;
 

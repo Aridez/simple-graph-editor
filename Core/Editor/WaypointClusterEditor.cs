@@ -41,11 +41,11 @@ public class WaypointClusterEditor : Editor {
 	/// <summary>
 	/// Editing state, changed with buttons
 	/// </summary>
-	private WayPoint waypointClicked;				//waypoint clicked, if any.
+	private Waypoint waypointClicked;				//waypoint clicked, if any.
 	/// <summary>
 	/// Editing state, changed with buttons
 	/// </summary>
-	private WayPoint waypointDestiny;				//waypoint the mouse is over, if any.
+	private Waypoint waypointDestiny;				//waypoint the mouse is over, if any.
 	/// <summary>
 	/// Editing state, changed with buttons
 	/// </summary>
@@ -145,7 +145,7 @@ public class WaypointClusterEditor : Editor {
 	/// If it is source/sink is added to the pertinent special list too
 	/// The cluster object is referenced in the waypoint
 	/// </summary>
-	private WayPoint createPoint(RaycastHit hitinfo) {
+	private Waypoint createPoint(RaycastHit hitinfo) {
 		if (clusterobject.cluster == null) clusterobject.cluster = new GameObject("Waypoint Cluster");
 		GameObject waypointAux;
 		Undo.RecordObject(clusterobject, "Created waypoint");
@@ -154,10 +154,10 @@ public class WaypointClusterEditor : Editor {
 		waypointInstance.transform.position = hitinfo.point;
 		waypointInstance.transform.parent = clusterobject.cluster.transform;
 		waypointInstance.name = (clusterobject.waypoints.Count + 1).ToString();
-		clusterobject.waypoints.Add(waypointInstance.GetComponent<WayPoint>());
-		waypointInstance.GetComponent<WayPoint>().setParent(clusterobject);
+		clusterobject.waypoints.Add(waypointInstance.GetComponent<Waypoint>());
+		waypointInstance.GetComponent<Waypoint>().setParent(clusterobject);
 		Undo.RegisterCreatedObjectUndo (waypointInstance, "Created waypoint");
-		return waypointInstance.GetComponent<WayPoint>();
+		return waypointInstance.GetComponent<Waypoint>();
 	}
 	
 	/// <summary>
@@ -182,7 +182,7 @@ public class WaypointClusterEditor : Editor {
 	/// <summary>
 	/// Creates a link between source and destiny
 	/// </summary>
-    private void link(WayPoint source, WayPoint destiny) {
+    private void link(Waypoint source, Waypoint destiny) {
 		Undo.RecordObject(source, "waypointadd");
 		Undo.RecordObject(destiny, "waypointadd");
 		source.linkTo(destiny);
@@ -191,7 +191,7 @@ public class WaypointClusterEditor : Editor {
 	/// <summary>
 	/// Removes a link between source and destiny
 	/// </summary>
-    private void unLink(WayPoint source, WayPoint destiny)
+    private void unLink(Waypoint source, Waypoint destiny)
     {
         Undo.RecordObject(source, "waypointremove");
         Undo.RecordObject(destiny, "waypointremove");
@@ -210,7 +210,7 @@ public class WaypointClusterEditor : Editor {
 			previewSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 			DestroyImmediate(previewSphere.GetComponent<SphereCollider>());
 			previewSphere.transform.position = hitInfo.point;
-			waypointClicked = hitInfo.transform.gameObject.GetComponent<WayPoint>();
+			waypointClicked = hitInfo.transform.gameObject.GetComponent<Waypoint>();
 		}
 	}
 
@@ -230,7 +230,7 @@ public class WaypointClusterEditor : Editor {
 				DestroyImmediate(previewSphere.GetComponent<SphereCollider>());
 			}
 			previewSphere.transform.position = hitInfo.point;
-			waypointDestiny = hitInfo.transform.gameObject.GetComponent<WayPoint>();
+			waypointDestiny = hitInfo.transform.gameObject.GetComponent<Waypoint>();
 			if (waypointDestiny != null) waypointDestiny.setColor(Color.green);
 			if (waypointClicked != null && waypointClicked != waypointDestiny) {
 				if (waypointDestiny != null) DrawArrow.ForDebug(waypointClicked.transform.position, waypointDestiny.transform.position - waypointClicked.transform.position, (state == EditingState.Adding ? Color.red : Color.blue));

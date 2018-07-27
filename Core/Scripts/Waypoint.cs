@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 
 [ExecuteInEditMode]
-public class WayPoint : MonoBehaviour {
+public class Waypoint : MonoBehaviour {
 	[SerializeField]
 	[HideInInspector] 
 	/// <summary>
@@ -15,13 +15,13 @@ public class WayPoint : MonoBehaviour {
 	/// <summary>
 	/// The outgoing list of edges
 	/// </summary>
-	public List<WayPointPercent> outs = new List<WayPointPercent>(); 
+	public List<WaypointPercent> outs = new List<WaypointPercent>(); 
     
 	[HideInInspector]
 	/// <summary>
 	/// Incoming list of edges, hidden in the inspector
 	/// </summary>
-    public List<WayPoint> ins = new List<WayPoint>();				
+    public List<Waypoint> ins = new List<Waypoint>();				
 
 	/// <summary>
 	/// Main node color
@@ -33,9 +33,10 @@ public class WayPoint : MonoBehaviour {
 	public WaypointCluster getParent() { return parent;}
 
 	/// <summary>
-	/// Returns a random node based on the probabilty defined in the WayPointPercent class
+	/// Returns a random waypoint based on the probabilty defined in the WaypointPercent class
 	/// </summary>
-	public WayPoint getNextWaypoint() {
+	/// <returns>Returns a random waypoint based on the chances set in the edges</returns>
+	public Waypoint getNextWaypoint() {
 		int prob = Random.Range(0, 100);
 		int sum = 0;
 		for (int i = 0; i < outs.Count; ++i) {
@@ -63,23 +64,24 @@ public class WayPoint : MonoBehaviour {
 	/// Links this waypoint (directionally) with the passed waypoint and sets the probabilities of all edges to the same
 	/// </summary>
 	/// <param name="node"> Node to be linked to</param>
-	public void linkTo(WayPoint waypoint) {
+	public void linkTo(Waypoint waypoint) {
 		if (waypoint == this) {
 			Debug.LogError("A waypoint cannot be linked to itself");
 			return;
 		}
 		for (int i =0; i < outs.Count; ++i) if (waypoint == outs[i].waypoint) return;
 		if (waypoint.ins.Contains(this)) return;
-		outs.Add(new WayPointPercent(waypoint));
+		outs.Add(new WaypointPercent(waypoint));
 		waypoint.ins.Add(this);
 		setSame();
+		parent.CreateWaypoint(Vector3.zero);
 	}
 
 	/// <summary>
 	/// Removes a link (directionally) between this waypoiny and the passed waypoint and sets the probabilities of all edges to the same
 	/// </summary>
 	/// <param name="node"> Node to remove the link from</param>
-	public void unlinkFrom(WayPoint waypoint) {
+	public void unlinkFrom(Waypoint waypoint) {
 		for (int i = 0; i < outs.Count; ++i) if (outs[i].waypoint == waypoint) outs.RemoveAt(i);
 		waypoint.ins.Remove(this);
 	}
@@ -148,7 +150,7 @@ public class WayPoint : MonoBehaviour {
 		for (int i = outs.Count-1; i >= 0; --i) this.unlinkFrom(outs[i].waypoint);
 		for (int i = ins.Count-1; i >= 0; --i) ins[i].unlinkFrom(this);
 		Undo.RegisterCompleteObjectUndo(this, "destroyed");
-		this.getParent().remove(this);
+		this.getParent().waypoints.Remove(this);
 	}
 
 }
@@ -157,23 +159,23 @@ public class WayPoint : MonoBehaviour {
 /// <summary>
 /// Small class to represent the probability of edges
 /// </summary>
-public class WayPointPercent {
+public class WaypointPercent {
 	[Range(0, 100)]
 	/// <summary>
-	/// Probability of each edge, from 0 to 100
+	/// Probability of choosing this edge, from 0 to 100
 	/// </summary>
 	public int probability = 0;
 	[ReadOnly] 
 	/// <summary>
 	/// The waypoint this edge is linked to
 	/// </summary>
-	public WayPoint waypoint;
+	public Waypoint waypoint;
 
 	/// <summary>
 	/// Class constructor
 	/// </summary>
 	/// <param name="waypoint"> The waypoint to be linked to</param>
-	public WayPointPercent(WayPoint waypoint) {
+	public WaypointPercent(Waypoint waypoint) {
 		this.waypoint = waypoint;
 	}
 

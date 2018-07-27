@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public class findPath : MonoBehaviour {
 
-    public List<WayPoint> route;
+    public List<Waypoint> route;
 
-    public WayPoint start;
-    public WayPoint end;
+    public Waypoint start;
+    public Waypoint end;
 
     public float speed = 1f;
     private Transform t;
@@ -34,21 +34,21 @@ public class findPath : MonoBehaviour {
             i++;
 	}
 
-    public List<WayPoint> findRouteTo(WayPoint Start, WayPoint End) {
+    public List<Waypoint> findRouteTo(Waypoint Start, Waypoint End) {
         //We will store the path through a dictionary to keep track of where we came from to that point
         //and to keep track of the visited waypoints
-        Dictionary<WayPoint, WayPoint> d= new Dictionary<WayPoint, WayPoint>();
+        Dictionary<Waypoint, Waypoint> d= new Dictionary<Waypoint, Waypoint>();
         //first we save the root as visited in our dictionary
         d.Add(Start, null);
 
         //BFS to find the path with least nodes in between to our target
-        Queue<WayPoint> q = new Queue<WayPoint>();
+        Queue<Waypoint> q = new Queue<Waypoint>();
         q.Enqueue(Start);
         while (q.Count > 0) {
-            WayPoint current = q.Dequeue();
+            Waypoint current = q.Dequeue();
             if (current == null)
                 continue;
-            foreach(WayPointPercent w in current.outs) {
+            foreach(WaypointPercent w in current.outs) {
                 if (!d.ContainsKey(w.waypoint)) {
                     q.Enqueue(w.waypoint);
                     d.Add(w.waypoint, current);
@@ -57,9 +57,9 @@ public class findPath : MonoBehaviour {
         }
 
         //Now we have to translate from dictionary to list
-        List<WayPoint> result = new List<WayPoint>();
+        List<Waypoint> result = new List<Waypoint>();
         //start retrieving the path from the end
-        WayPoint i = End;
+        Waypoint i = End;
         //until we find a node without origin (the starting node)
         while (i != null) {
             //insert at the beggining of the list

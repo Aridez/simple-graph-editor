@@ -7,20 +7,20 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(WayPoint), true)]
+[CustomEditor(typeof(Waypoint), true)]
 [CanEditMultipleObjects]
 class WaypointEditor : Editor {
 
 	/// <summary>
 	/// The waypoint currently being edited
 	/// </summary>
-	private WayPoint waypoint;
+	private Waypoint waypoint;
 
 	/// <summary>
 	/// Initialization of the waypoint variable
 	/// </summary>
 	void OnEnable() {
-		waypoint = (WayPoint)target;
+		waypoint = (Waypoint)target;
 	}
 
 	/// <summary>
