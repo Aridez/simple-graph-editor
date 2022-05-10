@@ -3,7 +3,7 @@
   "version": "2.1.0",
   "displayName": "Simple graph editor",
   "description": "A simple unity extension to create directed graphs in no time!",
-  "unity": "5.4",
+  "unity": "2017.1",
   "documentationUrl": "https://skytanet.com/SimpleGraphEditor/introduction",
   "keywords": [
     "graph",
