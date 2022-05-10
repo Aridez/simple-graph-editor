@@ -13,5 +13,12 @@
   "author": {
     "name": "Eric Mourin",
     "url": "https://www.skytanet.com"
-  }
+  },
+  "samples": [
+    {
+        "displayName": "Demo scenes",
+        "description": "Contains sample scenes for the different use cases of the graph editor",
+        "path": "Samples~/DemoScenes"
+    }
+]
 }
